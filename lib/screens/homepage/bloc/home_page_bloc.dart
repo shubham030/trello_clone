@@ -74,6 +74,13 @@ class HomePageBloc {
     _trelloLists.add(value);
   }
 
+  void deletedList(String id) {
+    var value = List<TrelloListModel>.from(_trelloLists.value);
+    value.removeWhere((element) => element.id == id);
+
+    _trelloLists.add(value);
+  }
+
   void dispose() {
     _trelloLists.close();
   }

@@ -8,8 +8,9 @@ import 'package:trello_clone/screens/homepage/bloc/home_page_bloc.dart';
 import 'package:trello_clone/screens/homepage/models/drag_update_details_model.dart';
 import 'package:trello_clone/screens/homepage/models/target_data_model.dart';
 import 'package:trello_clone/screens/homepage/views/home_page.dart';
-import 'package:trello_clone/screens/homepage/widgets/card.dart';
 import 'package:trello_clone/screens/homepage/widgets/card_title_input_widget.dart';
+import 'package:trello_clone/screens/homepage/widgets/list_pop_up_menu.dart';
+import 'package:trello_clone/screens/homepage/widgets/trello_card_holder.dart';
 
 class TrelloListHolder extends StatefulWidget {
   final TrelloListModel model;
@@ -56,8 +57,16 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.model.title,
+            child: Row(
+              children: [
+                Text(
+                  widget.model.title,
+                ),
+                Spacer(),
+                ListPopUpMenu(
+                  onSelected: handlePopMenuSelection,
+                ),
+              ],
             ),
           ),
           Builder(
@@ -127,7 +136,7 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
               );
               var child = Container(
                 height: trelloCardHeight,
-                child: TrelloCard(
+                child: TrelloCardHolder(
                   model: items[index],
                   parentListId: widget.model.id,
                   onDrageStarted: () {},
@@ -163,6 +172,17 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
             },
           );
         });
+  }
+
+  void handlePopMenuSelection(ListMenuItem item) {
+    switch (item) {
+      case ListMenuItem.Delete:
+        Provider.of<HomePageBloc>(
+          context,
+          listen: false,
+        ).deletedList(widget.model.id);
+        break;
+    }
   }
 
   Widget _buildDragTarget(int? cardIndex) {

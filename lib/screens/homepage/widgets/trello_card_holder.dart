@@ -2,8 +2,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:trello_clone/models/trello_card_model.dart';
 import 'package:trello_clone/screens/homepage/models/target_data_model.dart';
+import 'package:trello_clone/screens/homepage/widgets/show_card_dialog.dart';
+import 'package:trello_clone/screens/homepage/widgets/trello_card.dart';
 
-class TrelloCard extends StatelessWidget {
+class TrelloCardHolder extends StatelessWidget {
   final VoidCallback onDrageStarted;
   final ValueChanged<DragUpdateDetails> onDragUpdate;
   final ValueChanged onDragEnded;
@@ -11,7 +13,7 @@ class TrelloCard extends StatelessWidget {
 
   final TrelloCardModel model;
   final String parentListId;
-  const TrelloCard({
+  const TrelloCardHolder({
     Key? key,
     required this.onEnter,
     required this.onDrageStarted,
@@ -29,31 +31,21 @@ class TrelloCard extends StatelessWidget {
         final pos = box.localToGlobal(Offset.zero);
         onEnter(pos);
       },
-      child: Draggable<TargetDataModel<TrelloCardModel>>(
-        data: TargetDataModel<TrelloCardModel>(
-            data: model, fromList: parentListId),
-        child: Card(
-          child: Text(model.title),
+      child: InkWell(
+        onTap: () {
+          showCardDialog(context, model);
+        },
+        child: Draggable<TargetDataModel<TrelloCardModel>>(
+          data: TargetDataModel<TrelloCardModel>(
+              data: model, fromList: parentListId),
+          child: TrelloCard(model: model),
+          feedback: TrelloCard(model: model),
+          childWhenDragging: Container(),
+          onDragStarted: onDrageStarted,
+          onDragEnd: onDragEnded,
+          onDragUpdate: onDragUpdate,
         ),
-        feedback: Container(
-          color: Colors.deepOrange,
-          height: 40,
-          width: 300,
-          child: const Icon(Icons.directions_run),
-        ),
-        childWhenDragging: Container(
-          height: 40.0,
-          width: 300.0,
-          color: Colors.pinkAccent,
-          child: const Center(
-            child: Text('Child When Dragging'),
-          ),
-        ),
-        onDragStarted: onDrageStarted,
-        onDragEnd: onDragEnded,
-        onDragUpdate: onDragUpdate,
       ),
     );
-    // Container(height: 40, child: Card(child: Text(text))),
   }
 }
