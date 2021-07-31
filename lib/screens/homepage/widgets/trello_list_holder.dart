@@ -43,6 +43,7 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double itemHeight = (widget.model.items.length) * trelloCardHeight;
     return Container(
+      constraints: BoxConstraints(maxHeight: screenHeight - 100),
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(4),
@@ -61,7 +62,7 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
           ),
           Builder(
             builder: (context) {
-              if (itemHeight > screenHeight - 100) {
+              if (itemHeight > screenHeight - 200) {
                 return Expanded(
                   child: buildListView(widget.model.items, _scrollController),
                 );

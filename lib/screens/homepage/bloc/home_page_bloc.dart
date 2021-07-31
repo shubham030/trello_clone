@@ -18,7 +18,7 @@ class HomePageBloc {
             title: "Item list $id",
             id: Uuid().v1(),
             items: List.generate(
-              10,
+              20,
               (index) => TrelloCardModel(
                 id: Uuid().v1(),
                 title: "random data $index",
