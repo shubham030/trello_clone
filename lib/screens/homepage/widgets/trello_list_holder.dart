@@ -182,7 +182,7 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
         Provider.of<HomePageBloc>(
           context,
           listen: false,
-        ).deletedList(widget.model.id);
+        ).deleteList(widget.model);
         break;
     }
   }
@@ -203,10 +203,10 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
       onAccept: (TargetDataModel<TrelloCardModel> model) {
         print("on accept called");
         if (cardIndex != null) {
-          Provider.of<HomePageBloc>(context, listen: false)
-              .removeData(model.fromList, model.data.id);
-          Provider.of<HomePageBloc>(context, listen: false)
-              .addData(widget.model.id, cardIndex, model.data);
+          Provider.of<HomePageBloc>(context, listen: false).moveCard(
+            widget.model.id,
+            model.data,
+          );
         }
         Provider.of<DragUpdatesBloc>(context, listen: false).clearData;
       },
