@@ -46,7 +46,7 @@ class HomePageBloc {
 
   void addNewCard(String listId, String text) {
     var value = _trelloLists.value;
-    value.firstWhere((element) => element.id == listId).items.add(
+    value.firstWhere((element) => element.id == listId).items!.add(
           TrelloCardModel(id: Uuid().v1(), title: text),
         );
 
@@ -57,7 +57,7 @@ class HomePageBloc {
     print("$listId $itemId");
     var value = List<TrelloListModel>.from(_trelloLists.value);
 
-    value.firstWhere((element) => element.id == listId).items.removeWhere(
+    value.firstWhere((element) => element.id == listId).items!.removeWhere(
           (d) => d.id == itemId,
         );
 
@@ -68,7 +68,7 @@ class HomePageBloc {
     var value = _trelloLists.value;
     value
         .firstWhere((element) => element.id == listId)
-        .items
+        .items!
         .insert(index, model);
 
     _trelloLists.add(value);
