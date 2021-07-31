@@ -7,7 +7,7 @@ import 'package:trello_clone/screens/homepage/models/drag_update_details_model.d
 class DragUpdatesBloc {
   final _dragUpdate = BehaviorSubject<Offset?>.seeded(null);
   final _hoveredIndex = BehaviorSubject<int?>.seeded(null);
-  final _hoveredList = BehaviorSubject<String?>();
+  final _hoveredList = BehaviorSubject<String?>.seeded(null);
 
   Function(Offset) get onDragUpdate => _dragUpdate.sink.add;
   Function(int) get onHoveredIndexUpdate => _hoveredIndex.sink.add;
