@@ -10,15 +10,15 @@ class TrelloCard extends StatelessWidget {
   final ValueChanged<Offset> onEnter;
 
   final TrelloCardModel model;
-  final int index;
+  final String parentListId;
   const TrelloCard({
     Key? key,
     required this.onEnter,
-    required this.index,
     required this.onDrageStarted,
     required this.onDragUpdate,
     required this.onDragEnded,
     required this.model,
+    required this.parentListId,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,8 @@ class TrelloCard extends StatelessWidget {
         onEnter(pos);
       },
       child: Draggable<TargetDataModel<TrelloCardModel>>(
-        data: TargetDataModel<TrelloCardModel>(data: model, fromList: index),
+        data: TargetDataModel<TrelloCardModel>(
+            data: model, fromList: parentListId),
         child: Card(
           child: Text(model.title),
         ),

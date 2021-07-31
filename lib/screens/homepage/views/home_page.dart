@@ -52,25 +52,7 @@ class _HomePageState extends State<HomePage> {
                     snapshot.data!.length,
                     (listIndex) {
                       return TrelloListHolder(
-                        listTitle: snapshot.data!.elementAt(listIndex).title,
-                        onDataAdded: (_) {},
-                        onCanceled: () {},
-                        onAddCardPressed: () {},
-                        items: snapshot.data!.elementAt(listIndex).items,
-                        listIndex: listIndex,
-                        // Container(
-                        //   width: 300,
-                        //   height: () {
-                        //     double screenHeight = MediaQuery.of(context).size.height;
-                        //     double itemHeight =
-                        //         (lists[listIndex].length - 1) * trelloCardHeight;
-                        //     if (itemHeight > screenHeight) {
-                        //       return screenHeight;
-                        //     } else {
-                        //       return itemHeight;
-                        //     }
-                        //   }(),
-                        // ),
+                        model: snapshot.data!.elementAt(listIndex),
                       );
                     },
                   ).toList(),

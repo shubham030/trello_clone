@@ -5,5 +5,17 @@ class TrelloListModel {
   final String id;
   final List<TrelloCardModel> items;
 
+  TrelloListModel copyWith({
+    String? id,
+    String? title,
+    List<TrelloCardModel>? items,
+  }) {
+    return TrelloListModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      items: items ?? this.items,
+    );
+  }
+
   TrelloListModel({required this.title, required this.id, required this.items});
 }

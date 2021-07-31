@@ -1,5 +1,5 @@
 class TargetDataModel<T> {
-  final int fromList;
+  final String fromList;
   final T data;
 
   TargetDataModel({

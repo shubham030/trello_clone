@@ -7,25 +7,25 @@ import 'package:trello_clone/screens/homepage/models/drag_update_details_model.d
 class DragUpdatesBloc {
   final _dragUpdate = BehaviorSubject<Offset?>.seeded(null);
   final _hoveredIndex = BehaviorSubject<int?>.seeded(null);
-  final _hoveredList = BehaviorSubject<int?>();
+  final _hoveredList = BehaviorSubject<String?>();
 
   Function(Offset) get onDragUpdate => _dragUpdate.sink.add;
   Function(int) get onHoveredIndexUpdate => _hoveredIndex.sink.add;
-  Function(int) get onHoveredListUpdate => _hoveredList.sink.add;
+  Function(String) get onHoveredListUpdate => _hoveredList.sink.add;
 
   Stream<Offset?> get dragUpdate => _dragUpdate.stream;
   Stream<int?> get hoveredIndex => _hoveredIndex.stream;
-  Stream<int?> get hoveredList => _hoveredList.stream;
+  Stream<String?> get hoveredList => _hoveredList.stream;
 
-  Stream<DragUpdateDetailsModel> get dragUpdateDetails =>
-      CombineLatestStream.combine3<Offset?, int?, int?, DragUpdateDetailsModel>(
+  Stream<DragUpdateDetailsModel> get dragUpdateDetails => CombineLatestStream
+          .combine3<Offset?, int?, String?, DragUpdateDetailsModel>(
         dragUpdate,
         hoveredIndex,
         hoveredList,
         (a, b, c) => DragUpdateDetailsModel(
           offset: a,
           itemIndex: b,
-          listIndex: c,
+          listId: c,
         ),
       );
 
