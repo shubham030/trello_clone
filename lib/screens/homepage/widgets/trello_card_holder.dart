@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trello_clone/models/trello_card_model.dart';
+import 'package:trello_clone/screens/homepage/bloc/home_page_bloc.dart';
 import 'package:trello_clone/screens/homepage/models/target_data_model.dart';
 import 'package:trello_clone/screens/homepage/widgets/show_card_dialog.dart';
 import 'package:trello_clone/screens/homepage/widgets/trello_card.dart';
@@ -33,7 +35,10 @@ class TrelloCardHolder extends StatelessWidget {
       },
       child: InkWell(
         onTap: () {
-          showCardDialog(context, model);
+          showCardDialog(context, model, (newModel) {
+            Provider.of<HomePageBloc>(context, listen: false)
+                .updateCardModel(newModel);
+          });
         },
         child: Draggable<TargetDataModel<TrelloCardModel>>(
           data: TargetDataModel<TrelloCardModel>(

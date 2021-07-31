@@ -24,13 +24,19 @@ class TrelloCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Spacer(),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  DateFormat.yMMMEd().format(model.date),
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              )
+              Row(
+                children: [
+                  Offstage(
+                    offstage: model.description == null,
+                    child: Icon(Icons.feed_outlined, color: Colors.grey),
+                  ),
+                  Spacer(),
+                  Text(
+                    DateFormat.yMMMEd().format(model.date),
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

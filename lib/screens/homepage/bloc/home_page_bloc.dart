@@ -1,4 +1,5 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:trello_clone/common/strings.dart';
 import 'package:trello_clone/models/trello_card_model.dart';
 import 'package:trello_clone/models/trello_list_model.dart';
 import 'package:uuid/uuid.dart';
@@ -11,26 +12,57 @@ class HomePageBloc {
   Future<void> init() async {
     await Future.delayed(Duration(seconds: 2));
     List<TrelloListModel> data = [];
-    ["1", "4"].forEach(
-      (id) {
+
+    sampleData.map(
+      (animalList) {
+        var listId = Uuid().v1();
         data.add(
           TrelloListModel(
-            title: "Item list $id",
-            id: Uuid().v1(),
-            items: List.generate(
-              20,
-              (index) => TrelloCardModel(
-                id: Uuid().v1(),
-                title: "random data $index",
-                date: DateTime.now(),
-              ),
-            ),
+            title: "Animals ${animalList.length}",
+            id: listId,
+            items: animalList
+                .map(
+                  (title) => TrelloCardModel(
+                    id: Uuid().v1(),
+                    listId: listId,
+                    title: title,
+                    date: DateTime.now(),
+                  ),
+                )
+                .toList(),
           ),
         );
       },
-    );
+    ).toList();
 
     _trelloLists.add(data);
+  }
+
+  void updateCardModel(TrelloCardModel model) {
+    var value = _trelloLists.value;
+    late int index;
+    for (int i = 0; i < value.length; i++) {
+      if (value[i].id == model.listId) {
+        index = i;
+        break;
+      }
+    }
+
+    var trelloList = value[index];
+    //restrucuture data to avoid updating model by copying all
+    //avoid storing card models in list model
+    List<TrelloCardModel> models = [];
+    trelloList.items.forEach((element) {
+      if (model.id == element.id) {
+        models.add(element.copyWith(description: model.description));
+      } else {
+        models.add(element);
+      }
+    });
+
+    value[index] = trelloList.copyWith(items: models);
+
+    _trelloLists.add(value);
   }
 
   void addNewList(String title) {
@@ -50,6 +82,7 @@ class HomePageBloc {
     value.firstWhere((element) => element.id == listId).items.add(
           TrelloCardModel(
             id: Uuid().v1(),
+            listId: listId,
             title: text,
             date: DateTime.now(),
           ),
