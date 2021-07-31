@@ -14,7 +14,7 @@ class TrelloCard extends StatelessWidget {
       width: trelloCardWidth,
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.all(4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
