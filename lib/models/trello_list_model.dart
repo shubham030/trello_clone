@@ -57,8 +57,5 @@ class TrelloListModel {
   Map<String, dynamic> toMap() => {
         "id": id,
         "title": title,
-        "items": items != null
-            ? List<dynamic>.from(items!.map((x) => x.toMap()))
-            : null,
       };
 }

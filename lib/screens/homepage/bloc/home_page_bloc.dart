@@ -101,8 +101,11 @@ class HomePageBloc {
   //   _trelloLists.add(value);
   // }
 
+//udpating list //need to figure out way to delete by id
   void deleteList(TrelloListModel model) {
-    trelloCardService.deleteList(model);
+    var updatedList = List<TrelloListModel>.from(_trelloLists.value);
+    updatedList.removeWhere((element) => element.id == model.id);
+    trelloCardService.deleteList(updatedList);
     // var value = List<TrelloListModel>.from(_trelloLists.value);
     // value.removeWhere((element) => element.id == id);
 

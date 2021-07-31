@@ -11,7 +11,7 @@ abstract class TrelloCardService {
   Future<bool> createCard(TrelloCardModel model);
   // Future<bool> deletedCard(String listId, cardId);
   Future<bool> createList(TrelloListModel model);
-  Future<bool> deleteList(TrelloListModel model);
+  Future<bool> deleteList(List<TrelloListModel> models);
   Future<bool> reorderCard(TrelloCardModel model);
 
   factory TrelloCardService() {
@@ -55,11 +55,11 @@ class TrelloCardServiceImpl implements TrelloCardService {
   }
 
   @override
-  Future<bool> deleteList(TrelloListModel model) async {
+  Future<bool> deleteList(List<TrelloListModel> models) async {
     try {
       await boardRef.update(
         {
-          "lists": FieldValue.arrayRemove([model.toMap()]),
+          "lists": models.map((e) => e.toMap()),
         },
       );
       return true;
@@ -84,8 +84,10 @@ class TrelloCardServiceImpl implements TrelloCardService {
 
   @override
   Stream<List<TrelloListModel>> getAllLists() async* {
-    var cards =
-        cardsRef.where("boardId", isEqualTo: Config().boardId).snapshots();
+    var cards = cardsRef
+        .where("boardId", isEqualTo: Config().boardId)
+        .orderBy("reOrderedAt")
+        .snapshots();
     var board = boardRef.snapshots();
 
     yield* CombineLatestStream.combine2<
@@ -118,6 +120,8 @@ class TrelloCardServiceImpl implements TrelloCardService {
               TrelloListModel list = TrelloListModel.fromMap(item);
               if (itemsData.containsKey(list.id)) {
                 list = list.copyWith(items: itemsData[list.id]);
+              } else {
+                list = list.copyWith(items: []);
               }
               models.add(list);
             });
