@@ -84,10 +84,8 @@ class TrelloCardServiceImpl implements TrelloCardService {
 
   @override
   Stream<List<TrelloListModel>> getAllLists() async* {
-    var cards = cardsRef
-        .where("boardId", isEqualTo: Config().boardId)
-        .orderBy("reOrderedAt")
-        .snapshots();
+    var cards =
+        cardsRef.where("boardId", isEqualTo: Config().boardId).snapshots();
     var board = boardRef.snapshots();
 
     yield* CombineLatestStream.combine2<
