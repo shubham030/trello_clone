@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trello_clone/common/images.dart';
 import 'package:trello_clone/common/strings.dart';
 import 'package:trello_clone/models/trello_list_model.dart';
+import 'package:trello_clone/screens/homepage/bloc/drag_updates.dart';
 import 'package:trello_clone/screens/homepage/bloc/home_page_bloc.dart';
 import 'package:trello_clone/screens/homepage/widgets/card_title_input_widget.dart';
 import 'package:trello_clone/screens/homepage/widgets/home_page_app_bar.dart';
@@ -35,15 +37,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => bloc,
+    return MultiProvider(
+      providers: [
+        Provider<DragUpdatesBloc>(
+          create: (context) => DragUpdatesBloc(),
+          dispose: (_, b) => b.dispose(),
+        ),
+        Provider<HomePageBloc>(
+          create: (_) => bloc,
+          dispose: (_, b) => b.dispose(),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Colors.grey[350],
         body: Stack(
           fit: StackFit.expand,
           children: [
             Image.network(
-              'https://images.unsplash.com/photo-1477158340414-06e7a2c10ada?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MnwxMTEyODQ1fHxlbnwwfHx8fA%3D%3D&w=1000&q=80',
+              bgImage,
               fit: BoxFit.cover,
             ),
             Container(

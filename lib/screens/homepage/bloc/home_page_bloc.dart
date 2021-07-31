@@ -22,6 +22,7 @@ class HomePageBloc {
               (index) => TrelloCardModel(
                 id: Uuid().v1(),
                 title: "random data $index",
+                date: DateTime.now(),
               ),
             ),
           ),
@@ -47,7 +48,11 @@ class HomePageBloc {
   void addNewCard(String listId, String text) {
     var value = _trelloLists.value;
     value.firstWhere((element) => element.id == listId).items.add(
-          TrelloCardModel(id: Uuid().v1(), title: text),
+          TrelloCardModel(
+            id: Uuid().v1(),
+            title: text,
+            date: DateTime.now(),
+          ),
         );
 
     _trelloLists.add(value);
