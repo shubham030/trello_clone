@@ -74,7 +74,10 @@ class _HomePageState extends State<HomePage> {
                             maxHeight: trelloCardHeight + 56,
                           ),
                           width: trelloCardWidth,
-                          color: Colors.grey.withOpacity(0.5),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                           child: CardTitleInput(
                             onStart: () {},
                             onDataSubmit: (value) {

@@ -43,9 +43,12 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double itemHeight = (widget.model.items.length) * trelloCardHeight;
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(4),
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       width: trelloCardWidth,
-      color: Colors.grey[300],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
