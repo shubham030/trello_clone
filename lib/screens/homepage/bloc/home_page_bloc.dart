@@ -11,7 +11,7 @@ class HomePageBloc {
   Future<void> init() async {
     await Future.delayed(Duration(seconds: 2));
     List<TrelloListModel> data = [];
-    ["1", "2", "3"].forEach(
+    ["1", "4"].forEach(
       (id) {
         data.add(
           TrelloListModel(
@@ -30,6 +30,18 @@ class HomePageBloc {
     );
 
     _trelloLists.add(data);
+  }
+
+  void addNewList(String title) {
+    var value = _trelloLists.value;
+    value.add(
+      TrelloListModel(
+        id: Uuid().v1(),
+        title: title,
+        items: [],
+      ),
+    );
+    _trelloLists.add(value);
   }
 
   void addNewCard(String listId, String text) {

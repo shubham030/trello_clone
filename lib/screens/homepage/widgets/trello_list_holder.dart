@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:trello_clone/common/strings.dart';
 import 'package:trello_clone/models/trello_card_model.dart';
 import 'package:trello_clone/models/trello_list_model.dart';
@@ -10,6 +9,7 @@ import 'package:trello_clone/screens/homepage/models/drag_update_details_model.d
 import 'package:trello_clone/screens/homepage/models/target_data_model.dart';
 import 'package:trello_clone/screens/homepage/views/home_page.dart';
 import 'package:trello_clone/screens/homepage/widgets/card.dart';
+import 'package:trello_clone/screens/homepage/widgets/card_title_input_widget.dart';
 
 class TrelloListHolder extends StatefulWidget {
   final TrelloListModel model;
@@ -24,9 +24,7 @@ class TrelloListHolder extends StatefulWidget {
 }
 
 class _TrelloListHolderState extends State<TrelloListHolder> {
-  final _showAddCard = BehaviorSubject<bool>.seeded(false);
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -35,9 +33,8 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
 
   @override
   void dispose() {
-    _showAddCard.close();
     _scrollController.dispose();
-    _textEditingController.dispose();
+
     super.dispose();
   }
 
@@ -73,83 +70,28 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
               }
             },
           ),
-          StreamBuilder<bool>(
-            stream: _showAddCard.stream,
-            initialData: false,
-            builder: (context, snapshot) {
-              if (snapshot.data ?? false) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      Card(
-                        child: TextField(
-                          controller: _textEditingController,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            hintText: Strings.enterTitleForThisCard,
-                            hintStyle: TextStyle(fontSize: 12),
-                            contentPadding: const EdgeInsets.all(4.0),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_textEditingController.text.isNotEmpty) {
-                                Provider.of<HomePageBloc>(
-                                  context,
-                                  listen: false,
-                                ).addNewCard(
-                                  widget.model.id,
-                                  _textEditingController.text,
-                                );
-                              }
-                              _textEditingController.clear();
-                              _showAddCard.add(false);
-                            },
-                            child: Text(Strings.addCard),
-                          ),
-                          IconButton(
-                            splashColor: Colors.transparent,
-                            icon: Icon(Icons.close),
-                            onPressed: () {
-                              _showAddCard.add(false);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      _showAddCard.add(true);
-                      if (itemHeight > screenHeight - 50) {
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent + 60,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                    child: SizedBox(
-                      height: 30,
-                      child: Row(
-                        children: [
-                          Icon(Icons.add),
-                          Text(Strings.addACard),
-                        ],
-                      ),
-                    ),
-                  ),
+          CardTitleInput(
+            maxLines: 3,
+            buttonText1: Strings.addACard,
+            buttonText2: Strings.addCard,
+            hint: Strings.enterTitleForThisCard,
+            onStart: () {
+              if (itemHeight > screenHeight - 50) {
+                _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent + 60,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
                 );
               }
+            },
+            onDataSubmit: (value) {
+              Provider.of<HomePageBloc>(
+                context,
+                listen: false,
+              ).addNewCard(
+                widget.model.id,
+                value,
+              );
             },
           ),
         ],
@@ -167,6 +109,9 @@ class _TrelloListHolderState extends State<TrelloListHolder> {
         ),
         stream: Provider.of<DragUpdatesBloc>(context).dragUpdateDetails,
         builder: (context, snapshot) {
+          if (items.isEmpty) {
+            return _buildDragTarget(0);
+          }
           return ListView.builder(
             controller: controller,
             padding: const EdgeInsets.symmetric(horizontal: 8),
