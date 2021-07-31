@@ -104,10 +104,10 @@ class HomePageBloc {
 
   void addData(String listId, int index, TrelloCardModel model) {
     var value = _trelloLists.value;
-    value
-        .firstWhere((element) => element.id == listId)
-        .items
-        .insert(index, model);
+    value.firstWhere((element) => element.id == listId).items.insert(
+          index,
+          model.copyWith(listId: listId),
+        );
 
     _trelloLists.add(value);
   }
