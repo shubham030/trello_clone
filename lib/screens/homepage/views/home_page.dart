@@ -9,7 +9,7 @@ import 'package:trello_clone/screens/homepage/widgets/card_title_input_widget.da
 import 'package:trello_clone/screens/homepage/widgets/home_page_app_bar.dart';
 import 'package:trello_clone/screens/homepage/widgets/trello_list_holder.dart';
 
-double trelloCardHeight = 40;
+double trelloCardHeight = 80;
 double trelloCardWidth = 300;
 
 class HomePage extends StatefulWidget {
